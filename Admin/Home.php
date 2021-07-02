@@ -248,7 +248,7 @@
           <?php
             if($re["avatar"] !== "Trống"){
                 ?>
-            <img src="<?php echo $re["avatar"] ?>" alt="No Image">
+              <img src="<?php echo substr($re["avatar"] , 3)?>" alt="No Image">
                 <?php
             } else {
                 ?>
@@ -311,6 +311,11 @@
             </a>
           </li>
           <li>
+            <a href="#" class="menu-item" onclick="changeMenu(event,10);">
+              <i class="fa fa-users" aria-hidden="true"></i> Mark
+            </a>
+          </li>
+          <li>
             <a href="#" class="menu-item" onclick="changeMenu(event,4);">
               <i class="fa fa-users" aria-hidden="true"></i> Class Room
             </a>
@@ -368,6 +373,9 @@
           </div>
           <div id="content-8" class="content-item">
               <iframe class="item-contents" src="./ManageAccount/Show.php" scrolling="no" frameBorder="0"></iframe>
+          </div>
+          <div id="content-10" class="content-item">
+              <iframe class="item-contents" src="./ManageMark/Show.php" scrolling="no" frameBorder="0"></iframe>
           </div>
       </div>
     </div>

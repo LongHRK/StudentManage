@@ -1,0 +1,213 @@
+create table account(
+    username varchar(200) not null PRIMARY KEY,
+    password varchar(1000) not null,
+    type int not null DEFAULT 3
+);
+
+create table Admin(
+    id varchar(20) not null PRIMARY KEY,
+    name varchar(200) not null,
+    birthday date not null,
+    gender varchar(10) not null,
+    hometown varchar(200) not null,
+	avatar varchar(200)
+);
+
+create table subjects(
+    id varchar(20) not null PRIMARY KEY,
+    name varchar(200) not null,
+    credits int not null,
+    numberlesson int not null
+);
+
+create table teacher(
+    id varchar(20) not null PRIMARY KEY,
+    name varchar(200) not null,
+    birthday date not null,
+    gender varchar(10) not null,
+    salary float(50) not null,
+    hometown varchar(200) not null,
+	avatar varchar(200)
+);
+
+create table student(
+        id varchar(20) not null PRIMARY KEY,
+        name varchar(200) not null,
+        birthday date not null,
+        gender varchar(10) not null,
+        hometown varchar(200) not null,
+		avatar varchar(200)
+);
+
+create table classroom(
+         id varchar(20) not null PRIMARY KEY,
+         name varchar(200) not null
+);
+
+create table course(
+        id varchar(20) not null PRIMARY KEY,
+        name varchar(200) not null
+);
+
+create table courseinfo(
+    	idcourse varchar(20) not null,
+    	idclassroom varchar(20) not null,
+        idsubjects varchar(20) not null,
+        idteacher varchar(20) not null,
+        idstudent varchar(20),
+    	CONSTRAINT fk_idcou FOREIGN KEY(idcourse) REFERENCES course(id),
+    	CONSTRAINT fk_idcla FOREIGN KEY(idclassroom) REFERENCES classroom(id),
+        CONSTRAINT fk_idsub FOREIGN KEY(idsubjects) REFERENCES subjects(id),
+        CONSTRAINT fk_idtea FOREIGN KEY(idteacher) REFERENCES teacher(id),
+        CONSTRAINT fk_idstu FOREIGN KEY(idstudent) REFERENCES student(id)
+);
+
+create table schedules(
+	id varchar(20) not null Primary Key,
+        day varchar(200) not null,
+    	timeday varchar(200) not null,
+    	timestart date not null,
+        timeend date not null,
+  		idcourse varchar(20) not null,
+        idclassroom varchar(20) not null,
+        idsubjects varchar(20) not null,
+        idteacher varchar(20) not null,
+    	CONSTRAINT fk_idco FOREIGN KEY(idcourse) REFERENCES course(id),
+        CONSTRAINT fk_idcl FOREIGN KEY(idclassroom) REFERENCES classroom(id),
+        CONSTRAINT fk_idsu FOREIGN KEY(idsubjects) REFERENCES subjects(id),
+        CONSTRAINT fk_idte FOREIGN KEY(idteacher) REFERENCES teacher(id)
+);
+
+Create table Mark(
+    idteacher varchar(20) Not Null,
+    idstudent varchar(20) Not Null,
+    idsubjects varchar(20) Not Null,
+	mark1 float(3) Not Null,
+    mark2 float(3) Not Null,
+    mark3 float(3) Not Null,
+    markexam1 float(3) not null,
+    markexam2 float(3),
+    CONSTRAINT fk_tea FOREIGN KEY(idteacher) REFERENCES teacher(id),
+    CONSTRAINT fk_sub FOREIGN KEY(idsubjects) REFERENCES subjects(id),
+    CONSTRAINT fk_stu FOREIGN KEY(idstudent) REFERENCES student(id)
+);
+
+INSERT INTO classroom 
+VALUES ('class1','Phòng 1');
+INSERT INTO classroom
+VALUES ('class2','Phòng 2');
+INSERT INTO classroom 
+VALUES ('class3','Phòng 3');
+INSERT INTO classroom 
+VALUES ('class4','Phòng 4');
+INSERT INTO classroom 
+VALUES ('class5','Phòng 5');
+
+INSERT INTO subjects 
+VALUES ('subjects1','Quản lý ứng dụng',3,90);
+INSERT INTO subjects 
+VALUES ('subjects2','Lập trình java',2,60);
+INSERT INTO subjects 
+VALUES ('subjects3','Lập trình web',2,90);
+INSERT INTO subjects 
+VALUES ('subjects4','Lập trình Winform',3,90);
+INSERT INTO subjects 
+VALUES ('subjects5','Kiến tập',4,120);
+
+INSERT INTO teacher 
+VALUES ('teacher1','Phạm Văn Chương','1885-12-19','Nam',1000.50,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher2','Phạm Thị Phượng','1895-11-12','Nữ',905.50,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher3','Trần Nhật Linh','1875-05-09','Nam',1500.00,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher4','Nguyễn Ánh Linh','1990-07-05','Nữ',850.50,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher5','Chương Văn Hào','1885-10-19','Nam',1000.50,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher6','Kim Anh Hoa','1885-11-12','Nữ',905.50,'Quảng Nam','Trống');
+INSERT INTO teacher 
+VALUES ('teacher7','Trần Ánh Linh','1891-05-09','Nữ',1500.00,'Đà Nẵng','Trống');
+INSERT INTO teacher 
+VALUES ('teacher8','Trần Bảo Dung','1990-07-05','Nữ',850.50,'Đà Nẵng','Trống');
+
+INSERT INTO student 
+VALUES ('student1','Nguyễn Đức Long','2001-12-19','Nam','Quảng Ngãi','Trống');
+INSERT INTO student 
+VALUES ('student2','Phạm Thị Thu Thương','2001-09-02','Nữ','Quảng Ngãi','Trống');
+INSERT INTO student 
+VALUES ('student3','Trần Thế Phi Hùng','2000-11-09','Nam','Đà Nẵng','Trống');
+INSERT INTO student 
+VALUES ('student4','Phạm Thị Lan Anh','2000-02-15','Nữ','Đà Nẵng','Trống');
+INSERT INTO student 
+VALUES ('student5','Trần Anh Khoa','2000-11-19','Nam','Quảng Ngãi','Trống');
+INSERT INTO student 
+VALUES ('student6','Trần Long Nhật','2001-02-09','Nam','Quảng Nam','Trống');
+INSERT INTO student 
+VALUES ('student7','Trần Vân Chung','2001-11-09','Nam','Đà Nẵng','Trống');
+INSERT INTO student 
+VALUES ('student8','Nguyễn Thị Thu Tuyết','2000-02-15','Nữ','Đà Nẵng','Trống');
+
+INSERT INTO course 
+VALUES ('course1','Học Kỳ 1 năm 2021 CNTT');
+INSERT INTO course 
+VALUES ('course2','Học Kỳ 1 năm 2021 CNOT');
+INSERT INTO course 
+VALUES ('course3','Học Kỳ 1 năm 2021 QTKS');
+INSERT INTO course 
+VALUES ('course4','Học Kỳ 1 năm 2021 TĐH');
+
+INSERT INTO courseinfo 
+VALUES ('course1','class1','subjects1','teacher1','student1');
+INSERT INTO courseinfo 
+VALUES ('course1','class1','subjects1','teacher1','student2');
+INSERT INTO courseinfo 
+VALUES ('course1','class1','subjects1','teacher1','student3');
+INSERT INTO courseinfo 
+VALUES ('course1','class1','subjects1','teacher1','student4');
+
+INSERT INTO courseinfo 
+VALUES ('course1','class2','subjects2','teacher2','student1');
+INSERT INTO courseinfo 
+VALUES ('course1','class2','subjects2','teacher2','student2');
+INSERT INTO courseinfo 
+VALUES ('course1','class2','subjects2','teacher2','student3');
+INSERT INTO courseinfo 
+VALUES ('course1','class2','subjects2','teacher2','student4');
+
+INSERT INTO courseinfo 
+VALUES ('course1','class3','subjects3','teacher3','student1');
+INSERT INTO courseinfo 
+VALUES ('course1','class3','subjects3','teacher3','student2');
+INSERT INTO courseinfo 
+VALUES ('course1','class3','subjects3','teacher3','student3');
+INSERT INTO courseinfo 
+VALUES ('course1','class3','subjects3','teacher3','student4');
+
+INSERT INTO courseinfo 
+VALUES ('course1','class4','subjects4','teacher4','student1');
+INSERT INTO courseinfo 
+VALUES ('course1','class4','subjects4','teacher4','student2');
+INSERT INTO courseinfo 
+VALUES ('course1','class4','subjects4','teacher4','student3');
+INSERT INTO courseinfo 
+VALUES ('course1','class4','subjects4','teacher4','student4');
+
+
+
+INSERT INTO schedules 
+VALUES ('course1-1','Thứ 2','Buổi sáng','2021-02-01','2021-05-12','course1','class1','subjects1','teacher1');
+INSERT INTO schedules 
+VALUES ('course1-2','Thứ 3','Buổi sáng','2021-02-01','2021-05-30','course1','class2','subjects2','teacher2');
+INSERT INTO schedules 
+VALUES ('course1-3','Thứ 4','Buổi sáng','2021-02-01','2021-05-15','course1','class3','subjects3','teacher3');
+INSERT INTO schedules 
+VALUES ('course1-4','Thứ 5','Buổi sáng','2021-02-01','2021-05-12','course1','class1','subjects1','teacher1');
+INSERT INTO schedules 
+VALUES ('course1-5','Thứ 6','Buổi sáng','2021-02-01','2021-05-20','course1','class4','subjects4','teacher4');
+
+INSERT INTO `admin`(`id`, `name`, `birthday`, `gender`, `hometown`) 
+VALUES('admin','Nguyễn Đức Long','2001/12/19','Nam','Quảng Ngãi');
+
+INSERT INTO `account`(`username`, `password`, `type`) 
+VALUES ('admin',md5('0511'),1);
