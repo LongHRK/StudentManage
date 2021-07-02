@@ -82,15 +82,68 @@ Create table Mark(
     idteacher varchar(20) Not Null,
     idstudent varchar(20) Not Null,
     idsubjects varchar(20) Not Null,
-	mark1 float(3) Not Null,
-    mark2 float(3) Not Null,
-    mark3 float(3) Not Null,
-    markexam1 float(3) not null,
-    markexam2 float(3),
+	markbynumber float(3) not null,
+	markbyword varchar(200) not null,
     CONSTRAINT fk_tea FOREIGN KEY(idteacher) REFERENCES teacher(id),
     CONSTRAINT fk_sub FOREIGN KEY(idsubjects) REFERENCES subjects(id),
     CONSTRAINT fk_stu FOREIGN KEY(idstudent) REFERENCES student(id)
 );
+
+DELIMITER $$
+
+ CREATE TRIGGER before_courseInfo_insert
+
+ BEFORE INSERT ON courseinfo
+
+ FOR EACH ROW
+
+BEGIN
+
+ INSERT INTO mark
+
+SET
+
+ idteacher = NEW.idteacher,
+
+ idsubjects = NEW.idsubjects,
+
+ idstudent = NEW.idstudent;
+
+END$$
+
+ DELIMITER ;
+
+DELIMITER $$
+
+ CREATE TRIGGER before_courseInfo_update
+
+ BEFORE UPDATE ON courseinfo
+
+ FOR EACH ROW
+
+BEGIN
+
+ UPDATE mark SET idteacher = NEW.idteacher WHERE idsubjects = OLD.idsubjects AND idstudent = OLD.idstudent;
+
+END$$
+
+ DELIMITER ;
+
+DELIMITER $$
+
+ CREATE TRIGGER before_courseInfo_delete
+
+ BEFORE DELETE ON courseinfo
+
+ FOR EACH ROW
+
+BEGIN
+
+ DELETE FROM mark WHERE idteacher = OLD.idteacher AND idsubjects = OLD.idsubjects AND idstudent = OLD.idstudent;
+
+END$$
+
+ DELIMITER ;
 
 INSERT INTO classroom 
 VALUES ('class1','Phòng 1');
@@ -206,8 +259,8 @@ VALUES ('course1-4','Thứ 5','Buổi sáng','2021-02-01','2021-05-12','course1'
 INSERT INTO schedules 
 VALUES ('course1-5','Thứ 6','Buổi sáng','2021-02-01','2021-05-20','course1','class4','subjects4','teacher4');
 
-INSERT INTO `admin`(`id`, `name`, `birthday`, `gender`, `hometown`) 
-VALUES('admin','Nguyễn Đức Long','2001/12/19','Nam','Quảng Ngãi');
+INSERT INTO `admin`(`id`, `name`, `birthday`, `gender`, `hometown`, `avatar`) 
+VALUES('admin','Nguyễn Đức Long','2001/12/19','Nam','Quảng Ngãi','Trống');
 
 INSERT INTO `account`(`username`, `password`, `type`) 
 VALUES ('admin',md5('0511'),1);
