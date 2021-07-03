@@ -1,10 +1,6 @@
 <?php
 include '../../Apps/config.php';
-$page = new Apps_Libs_UserIdentity();
-if ($page->isLogin() === false) {
-    header("location:http://localhost/StudentManage/Login/");
-    die();
-}
+$page = new Apps_Libs_UserIdentity(); 
 ?>
 
 <style>
@@ -49,8 +45,8 @@ if ($page->isLogin() === false) {
     .header-btnadd #btnadd{
         font-size: 20px;
         height: 100%;
-        width: 150%;
-        background-color: #008080;
+        padding: 5px 20px;
+        background-color: gray;
     }
     .container-header .header-txtsearch{
         position: absolute;
@@ -205,7 +201,7 @@ if ($page->isLogin() === false) {
         <div class="container-header"> 
             <form action="#" method="GET">
                 <div class="header-btnadd">
-                    <!--<input type="button" name="btnadd" class="btn-handle" value="Add Course Info" id="btnadd" onclick="Showinsert()">-->
+                    <input type="button" class="btn-handle" value="Back" id="btnadd" onclick="Back()">
                 </div>
                 <div class="header-course">
                     <select name="subjects" id="selectcourse">
@@ -243,7 +239,7 @@ if ($page->isLogin() === false) {
                 <td class="col3">Subjects ID</td>
                 <td class="col4">Mark by number</td>
                 <td class="col5">Mark by word</td>
-                <td class="col6">Handle</td>
+                <td class="col6">Teacher ID</td>
                 </thead>
                 <tbody>
                     <?php
@@ -262,11 +258,11 @@ if ($page->isLogin() === false) {
                     if ($search || $getSubjects) {
                         if ($getSubjects) {
                             $result = $mark->buildparam([
-                                        "where" => "idsubjects = '" . $getSubjects . "'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idsubjects = '" . $getSubjects . "'",
                                         "other" => "LIMIT " . $item_per_page . " OFFSET " . $offset
                                     ])->select();
                             $totalresult = $mark->buildparam([
-                                        "where" => "idsubjects = '" . $getSubjects . "'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idsubjects = '" . $getSubjects . "'",
                                     ])->select();
                             foreach ($totalresult as $a) {
                                 $totalitem++;
@@ -276,11 +272,11 @@ if ($page->isLogin() === false) {
 
                         if ($search) {
                             $result = $mark->buildparam([
-                                        "where" => "idstudent like '%" . $page->getGet("txtsearch") . "%'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idteacher like '%" . $page->getGet("txtsearch") . "%'",
                                         "other" => "LIMIT " . $item_per_page . " OFFSET " . $offset
                                     ])->select();
                             $totalresult = $mark->buildparam([
-                                        "where" => "idstudent = '" . $search . "'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idteacher = '" . $search . "'",
                                     ])->select();
                             foreach ($totalresult as $a) {
                                 $totalitem++;
@@ -290,11 +286,11 @@ if ($page->isLogin() === false) {
 
                         if ($search && $getSubjects) {
                             $result = $mark->buildparam([
-                                        "where" => "idstudent like '%" . $page->getGet("txtsearch") . "%' and " . "idsubjects = '" . $getSubjects . "'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idteacher like '%" . $page->getGet("txtsearch") . "%' and " . "idsubjects = '" . $getSubjects . "'",
                                         "other" => "LIMIT " . $item_per_page . " OFFSET " . $offset
                                     ])->select();
                             $totalresult = $mark->buildparam([
-                                        "where" => "idstudent = '" . $search . "'",
+                                        "where" => "idstudent = '".$page->getSESSION("username") ."' " ."and idteacher = '" . $search . "'",
                                     ])->select();
                             foreach ($totalresult as $a) {
                                 $totalitem++;
@@ -303,9 +299,12 @@ if ($page->isLogin() === false) {
                         }
                     } else {
                         $result = $mark->buildparam([
+                                    "where"=> "idstudent = '".$page->getSESSION("username") ."'",
                                     "other" => "LIMIT " . $item_per_page . " OFFSET " . $offset
                                 ])->select();
-                        $totalresult = $mark->buildparam([])->select();
+                        $totalresult = $mark->buildparam([
+                            "where"=> "idstudent = '".$page->getSESSION("username") ."'"
+                        ])->select();
                         foreach ($totalresult as $a) {
                             $totalitem++;
                         }
@@ -335,12 +334,11 @@ if ($page->isLogin() === false) {
                             </td>
                             <td id="td-handle" class="col6">
                                 <p id="col-6" class="data">
-                                    <input type="button" id="btn-edit" value="Edit" name="btnedit" class="btn-handle" onclick="AddClass(<?php echo $i ?>);">
-                                    <!--<input type="button" id="btn-delete" value="Delete" name="btndelete" class="btn-handle" onclick="Deletedata('<?php echo $value["idsubjects"] ?>','<?php echo $value["idteacher"] ?>','<?php echo $value["idstudent"] ?>')">-->
+                                    <?php echo $value["idteacher"] ?>
                                 </p>
                                 <p id="col-6-in" class="input">
                                     <input type="submit" id="btn-save" value="Save" name="btnsave" class="btn-handle">
-                                    <input type="button" id="btn-cancel" value="Cancel" name="btncancel" class="btn-handle" onclick="DropClass(<?php echo $i ?>);">
+                                    <input type="button" id="btn-cancel" value="Back" name="btncancel" class="btn-handle" onclick="DropClass(<?php echo $i ?>);">
                                 </p>
                             </td>
                         </tr>
@@ -350,10 +348,11 @@ if ($page->isLogin() === false) {
                 }
                 ?>
                 <tr id="tr_pagination">
-                    <td colspan="6" id="td_pagination"><?php include_once '../HandleAdmin/PageNumber.php'; ?></td>
+                    <td colspan="6" id="td_pagination"><?php include_once '../../Admin/HandleAdmin/PageNumber.php'; ?></td>
                 </tr>
                 </tbody>
             </table>
+            
             <?php
             if ($page->getPOST("btnsave")) {
                 try {
@@ -369,7 +368,7 @@ if ($page->isLogin() === false) {
                     ])->update();
 
                     echo '<script language="javascript">';
-                    echo "location.replace('http://localhost/StudentManage/Admin/ManageMark/Show.php');";
+                    echo "location.replace('http://localhost/StudentManage/Teacher/HandleTeacher/Mark.php');";
                     echo '</script>';
                 } catch (Exception $ex) {
                     echo '<script language="javascript">';
@@ -438,10 +437,13 @@ if ($page->isLogin() === false) {
                                         return str.replace(/\s+/g, ' ')+"Điểm";
                                     }
                                     
-                                    function SetValuesText(ids,ida){
-                                        var x = document.getElementById(ids).value;
+                                    function SetValuesText(ide,ida){
+                                        var x = document.getElementById(ide).value;
                                         document.getElementById(ida).value = toWords(x);
-                                    }                                    
+                                    }
+                                    function Back(){
+                                        location.replace('http://localhost/StudentManage/Student/Home.php');
+                                    }
         </script>
     </div>
 </body>

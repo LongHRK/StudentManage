@@ -158,7 +158,7 @@ include '../Apps/config.php';
                 <div class="content">
             <div class="items">
                 <a href="./HandleTeacher/UpdateInFo.php">
-                <img class="items-image" src="../Media/image/EditInfo.png" alt="Errorr"/>
+                <img class="items-image" src="../Media/image/Edit.png" alt="Errorr"/>
                 <p class="items-text">Edit</p>
                 </a>
             </div>
@@ -181,9 +181,9 @@ include '../Apps/config.php';
                 </a>
             </div>
             <div class="items">
-                <a href="#">
-                <img class="items-image" src="../Media/image/About.png" alt="Errorr"/>
-                <p class="items-text">About</p>
+                <a href="./HandleTeacher/Mark.php">
+                    <img class="items-image" src="../Media/image/EditInfo.png" alt="Errorr"/>
+                <p class="items-text">Mark</p>
                 </a>
             </div>
         </div>

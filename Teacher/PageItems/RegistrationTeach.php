@@ -177,72 +177,49 @@ $insertsuccess = "";
             width: 100%;
             color: black;
         }
-        .items-schedule .content-schedule{
+        .items-schedule .content-Statistical{
             width: 100%;
             height: calc(100% - 17.5%);
         }
-        .content-schedule .schedule{
+        .content-Statistical .title-statistical{
             width: 100%;
-            height: 100%;
+            height: 15%;
             display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background-color: black;
+            align-items: center;
+            justify-content: space-around;
         }
-        .schedule > .title-schedule{
-            flex-basis: 15%;
+        .title-statistical .title-text{
+            width: 60px;
+            font-weight: bold;
+            color: #F09C42;
+            text-align: center;
+        }
+        .content-Statistical .body-statistical{
+            width: 100%;
+            height: 85%;
             display: flex;
             justify-content: space-around;
-            align-items: center;
-            font-size: 10px;
-            font-weight: bold;
-            background-color: white;
+            align-items: flex-end;
         }
-        .title-schedule .title-items.time{
+        .body-statistical .content-chart{
+            width: 60px;
+            height: var(--persent);
+            background-color:#F09C42;
             text-align: center;
-            flex-basis: 20%;
+            color: white;
+            border: 1px solid black;
+            animation: growth ease-in 0.7s;
         }
-        .title-schedule .title-items{
-            text-align: center;
-            flex-basis: 10%;
-        }
-
-        .schedule .items-schedule{
-            flex-basis: 25%;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            font-size: 15px;
-            font-weight: bold;
-            background-color: white;
-        }
-        .items-schedule .schedule-items.time{
-            text-align: left;
-            flex-basis: 20%;
-        }
-        .items-schedule .schedule-items{
-            text-align: center;
-            justify-content: center;
-            line-height: 50.19px;
-            flex-basis: 10%;
-        }
-        .items-schedule .schedule-items:hover{
-            background-color: #c8c8c8;
-        }
-        .items-schedule .schedule-items.time:hover{
-            background-color: white;
-        }
-        .items-schedule.items1 .schedule-items.time{
-            color: green;
-            font-weight: bold;
-        }
-        .items-schedule.items2 .schedule-items.time{
-            color: orange;
-            font-weight: bold;
-        }
-        .items-schedule.items3 .schedule-items.time{
-            color: gray;
-            font-weight: bold;
+        
+        @keyframes growth {
+            from {
+                opacity: 0;
+                height: calc(var(--persent) / 50%);
+            }
+            to {
+                opacity: 1;
+                height: var(--persent);
+            }
         }
     </style>
     <body>
@@ -386,108 +363,50 @@ $insertsuccess = "";
 
                 <div class="items-schedule">
                     <div class="text-3">
-                        <p>Your schedule teach</p>
+                        <p>Statistical Student's Mark</p>
                     </div>
                     <div class="border-3">
                         <hr>
                     </div>
-                    <div class="content-schedule">
-                        <?php
+                    <?php
+                        $mark = new Apps_Model_Mark();
+                        $totalmark = count($mark->buildparam([
+                            "where"=>"idteacher= '".$page->getSESSION("username")."'"
+                        ])->select());
+                        
+                        $markbad = count($mark->buildparam([
+                            "where"=>"idteacher= '".$page->getSESSION("username")."' and markbynumber < 5"
+                        ])->select());
+                        
+                        $markmedium = count($mark->buildparam([
+                            "where"=>"idteacher= '".$page->getSESSION("username")."' and markbynumber >= 5 and markbynumber <= 7"
+                        ])->select());
+                        
+                        $markgood = count($mark->buildparam([
+                            "where"=>"idteacher= '".$page->getSESSION("username")."' and markbynumber >= 7 and markbynumber <= 9"
+                        ])->select());
+                        
+                        $markverrygood = count($mark->buildparam([
+                            "where"=>"idteacher= '".$page->getSESSION("username")."' and markbynumber > 9"
+                        ])->select());
 
-                        function getResult() {
-                            $pagesub = new Apps_Libs_UserIdentity();
-                            $schedule = new Apps_Model_Schedule();
-                            $result = $schedule->buildparam([
-                                        "where" => "idteacher = ?",
-                                        "values" => [$pagesub->getSESSION("username")]
-                                    ])->select();
-                            return $result;
+                        function getPersent($totalmarks,$markingredient){
+                            $persent = $markingredient / $totalmarks * 100;
+                            return $persent;
                         }
-
-                        function getSchedule($i, $d) {
-                            $result = getResult();
-                            foreach ($result as $values) {
-                                if ($values["timeday"] === $d) {
-                                    if ($values["day"] === $i) {
-                                        echo 'Có';
-                                    }
-                                }
-                            }
-                        }
-                        ?>
-                        <div class="schedule">
-                            <div class="title-schedule">
-                                <p class="title-items time">Time</p>
-                                <p class="title-items">Monday</p>
-                                <p class="title-items">Tuesday</p>
-                                <p class="title-items">Wednesday</p>
-                                <p class="title-items">Thursday</p>
-                                <p class="title-items">Friday</p>
-                                <p class="title-items">Saturday</p>
-                            </div>
-                            <div class="items-schedule items1">
-                                <p class="schedule-items time">Buổi sáng</p>
-                                <div class="schedule-items"><?php
-                                    getSchedule("Thứ 2", "Buổi sáng");
-                                    ?></div>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 3", "Buổi sáng");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 4", "Buổi sáng");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 5", "Buổi sáng");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 6", "Buổi sáng");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 7", "Buổi sáng");
-                                    ?></p>
-                            </div>
-                            <div class="items-schedule items2">
-                                <p class="schedule-items time">Buổi chiều</p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 2", "Buổi chiều");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 3", "Buổi chiều");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 4", "Buổi chiều");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 5", "Buổi chiều");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 6", "Buổi chiều");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 7", "Buổi chiều");
-                                    ?></p>
-                            </div>
-                            <div class="items-schedule items3">
-                                <p class="schedule-items time">Buổi tối</p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 2", "Buổi tối");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 3", "Buổi tối");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 4", "Buổi tối");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 5", "Buổi tối");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 6", "Buổi tối");
-                                    ?></p>
-                                <p class="schedule-items"><?php
-                                    getSchedule("Thứ 7", "Buổi tối");
-                                    ?></p>
-                            </div>
+                    ?>
+                    <div class="content-Statistical">
+                        <div class="title-statistical">
+                            <div class="title-text"><- 5</div>
+                            <div class="title-text">5 - 7</div>
+                            <div class="title-text">7 - 9</div>
+                            <div class="title-text">9 -></div>
+                        </div>
+                        <div class="body-statistical">
+                            <div class="content-chart" style="--persent: <?php echo getPersent($totalmark, $markbad) ?>%"><?php echo getPersent($totalmark, $markbad) ?>%</div>
+                            <div class="content-chart" style="--persent: <?php echo getPersent($totalmark, $markmedium) ?>%"><?php echo getPersent($totalmark, $markmedium) ?>%</div>
+                            <div class="content-chart" style="--persent: <?php echo getPersent($totalmark, $markgood) ?>%"><?php echo getPersent($totalmark, $markgood) ?>%</div>
+                            <div class="content-chart" style="--persent: <?php echo getPersent($totalmark, $markverrygood) ?>%"><?php echo getPersent($totalmark, $markverrygood) ?>%</div>
                         </div>
                     </div>
                 </div>
