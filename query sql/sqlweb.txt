@@ -82,8 +82,8 @@ Create table Mark(
     idteacher varchar(20) Not Null,
     idstudent varchar(20) Not Null,
     idsubjects varchar(20) Not Null,
-	markbynumber float(3) not null,
-	markbyword varchar(200) not null,
+	markbynumber float(3) not null DEFAULT 0,
+	markbyword varchar(200) not null DEFAULT 'Chưa có điểm',
     CONSTRAINT fk_tea FOREIGN KEY(idteacher) REFERENCES teacher(id),
     CONSTRAINT fk_sub FOREIGN KEY(idsubjects) REFERENCES subjects(id),
     CONSTRAINT fk_stu FOREIGN KEY(idstudent) REFERENCES student(id)
